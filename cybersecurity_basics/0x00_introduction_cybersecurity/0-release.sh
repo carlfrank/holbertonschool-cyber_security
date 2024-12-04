@@ -1,2 +1,2 @@
 #!/bin/bash
-head -1 /etc/os-release | cut -d '"' -f2
+head -s1 /etc/os-release | cut -d '"' -f2
