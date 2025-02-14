@@ -1,5 +1,5 @@
 # Content Discovery in Web Security
-.
+
 ## Table of Contents
 
 * [What is Content Discovery?](#what-is-content-discovery)
