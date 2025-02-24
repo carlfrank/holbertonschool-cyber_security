@@ -1,2 +1,3 @@
 #!/bin/bash
-apparmor_status | grep -E "profiles|processes" || echo "AppArmor is not installed or not running"
+echo "apparmor module is $(lsmod | grep -q "apparmor" && echo "loaded." || echo "not loaded.")"
+aa-status
