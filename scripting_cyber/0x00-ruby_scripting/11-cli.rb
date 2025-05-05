@@ -1,17 +1,20 @@
 #!/usr/bin/env ruby
 require 'optparse'
 
-# Define the file to store tasks
-TASKS_FILE = 'tasks.txt'
-
-# Function to load tasks from the file
+# Load tasks from the file
 def load_tasks
-  File.exist?(TASKS_FILE) ? File.read(TASKS_FILE).split("\n") : []
+  if File.exist?('tasks.txt')
+    File.readlines('tasks.txt').map(&:chomp)
+  else
+    []
+  end
 end
 
-# Function to save tasks to the file
+# Save tasks to the file
 def save_tasks(tasks)
-  File.open(TASKS_FILE, 'w') { |file| file.puts(tasks) }
+  File.open('tasks.txt', 'w') do |file|
+    tasks.each { |task| file.puts(task) }
+  end
 end
 
 # Add a new task
@@ -28,6 +31,7 @@ def list_tasks
   if tasks.empty?
     puts "No tasks available."
   else
+    puts "Tasks:"
     tasks.each_with_index { |task, index| puts "#{index + 1}. #{task}" }
   end
 end
@@ -36,29 +40,29 @@ end
 def remove_task(index)
   tasks = load_tasks
   if index.between?(1, tasks.length)
-    task = tasks.delete_at(index - 1)
+    removed_task = tasks.delete_at(index - 1)
     save_tasks(tasks)
-    puts "Task '#{task}' removed."
+    puts "Task '#{removed_task}' removed."
   else
     puts "Invalid task index."
   end
 end
 
-# Parse the command-line options
+# Command-line options and argument parsing
 options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: cli.rb [options]"
 
   opts.on("-a", "--add TASK", "Add a new task") do |task|
-    add_task(task)
+    options[:add] = task
   end
 
   opts.on("-l", "--list", "List all tasks") do
-    list_tasks
+    options[:list] = true
   end
 
   opts.on("-r", "--remove INDEX", "Remove a task by index") do |index|
-    remove_task(index.to_i)
+    options[:remove] = index.to_i
   end
 
   opts.on("-h", "--help", "Show help") do
@@ -66,3 +70,14 @@ OptionParser.new do |opts|
     exit
   end
 end.parse!
+
+# Process options
+if options[:add]
+  add_task(options[:add])
+elsif options[:list]
+  list_tasks
+elsif options[:remove]
+  remove_task(options[:remove])
+else
+  puts "Usage: cli.rb [options]"
+end
