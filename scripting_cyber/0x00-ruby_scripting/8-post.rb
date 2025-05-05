@@ -14,5 +14,5 @@ def post_request(url, body_params)
 
   puts "Response status: #{response.code} #{response.message}"
   puts "Response body:"
-  puts JSON.pretty_generate(JSON.parse(response.body))
+  puts JSON.parse(response.body).to_json # this ensures the output has no extra spaces
 end
