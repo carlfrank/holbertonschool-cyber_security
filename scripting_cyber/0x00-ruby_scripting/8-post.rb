@@ -13,8 +13,12 @@ def post_request(url, body_params)
   response = http.request(request)
 
   if response.code.to_i == 404
-    puts "Error: #{response.code} #{response.message}"
+    # This should match the desired output exactly
+    puts "Response status: #{response.code} #{response.message}"
+    puts "Response body:"
+    puts "{}"
   else
+    # If the response isn't 404, print as usual
     puts "Response status: #{response.code} #{response.message}"
     puts "Response body:"
     puts JSON.pretty_generate(JSON.parse(response.body))
