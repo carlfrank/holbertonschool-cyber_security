@@ -12,8 +12,11 @@ def post_request(url, body_params)
 
   response = http.request(request)
 
-  puts "Response status: #{response.code} #{response.message}"
-  puts "Response body:"
-  # Pretty print JSON with line breaks and indentation
-  puts JSON.pretty_generate(JSON.parse(response.body))
+  if response.code.to_i == 404
+    puts "Error: #{response.code} #{response.message}"
+  else
+    puts "Response status: #{response.code} #{response.message}"
+    puts "Response body:"
+    puts JSON.pretty_generate(JSON.parse(response.body))
+  end
 end
